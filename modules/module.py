@@ -9,10 +9,10 @@ import math
 
 def pages(base_url, search, state, username, api_token):
     pages = requests.get(base_url + search.format(state), auth=(username,api_token)).json()['total_count']
-    if STATE == 'open':
+    if state == 'open':
         pages = math.ceil(pages/100)
         return pages
-    elif STATE == 'closed':
+    elif state == 'closed':
         pages = math.ceil(pages/100)
         return pages
 
@@ -86,7 +86,9 @@ def get_pulls(base_url, key, owner, repo, pulls, search, state, username, api_to
         r_pulls = requests.get(base_url + key + owner + repo + pulls.format(i+1, state),
                                auth=(username, api_token)).json()
         df_pulls = pd.json_normalize(r_pulls)
+        print(df_pulls)
         pulls_list.append(df_pulls)
+    print(pulls_list)
     df_pulls = pd.concat(pulls_list)
     df_pulls = df_pulls[field_list]
     return df_pulls
